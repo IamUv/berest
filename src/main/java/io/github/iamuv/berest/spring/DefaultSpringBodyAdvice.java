@@ -2,7 +2,6 @@ package io.github.iamuv.berest.spring;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.iamuv.berest.annotation.HttpRedirect;
 import io.github.iamuv.berest.core.BeRestChainContext;
 import io.github.iamuv.berest.core.result.RestfulResult;
 import org.slf4j.Logger;
@@ -45,31 +44,28 @@ public class DefaultSpringBodyAdvice implements ResponseBodyAdvice<Object>, Init
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         String requestId = response.getHeaders().getFirst(BeRestChainContext.HEADER_X_REQUEST_ID);
+        RestfulResult result = beRestChainContext.getResult(requestId);
 
-        HttpRedirect httpRedirect = body.getClass().getAnnotation(HttpRedirect.class);
-        if (httpRedirect != null) {
-            beRestChainContext.setRedirect(requestId, httpRedirect.url(), httpRedirect.clearBuffer(), httpRedirect.value());
+        ResponseStatus responseStatus = returnType.getMethod().getAnnotation(ResponseStatus.class);
+        Integer responseStatusCode = null;
+        if (responseStatus != null) {
+            responseStatusCode = responseStatus.code().value();
         }
 
-        httpRedirect = returnType.getMethod().getAnnotation(HttpRedirect.class);
-        if (httpRedirect != null) {
-            beRestChainContext.setRedirect(requestId, httpRedirect.url(), httpRedirect.clearBuffer(), httpRedirect.value());
+        Class<?> clazz = returnType.getMethod().getReturnType();
+        if (clazz == void.class) {
+            result = beRestChainContext.getResult(requestId);
+            result = beRestChainContext.handleResult(body, returnType.getMethod(), request.getMethod().name(), result, responseStatusCode);
+            return beRestChainContext.complete(result);
         }
 
-        RestfulResult result;
         if (body instanceof RestfulResult) {
             result = ((RestfulResult) body);
             return beRestChainContext.complete(result);
         }
-        result = beRestChainContext.getResult(requestId);
-        ResponseStatus responseStatus = returnType.getMethod().getAnnotation(ResponseStatus.class);
-        if (responseStatus != null) {
-            result.setHttpStatus(responseStatus.code().value());
-        }
 
-        result = beRestChainContext.handleResult(body, returnType.getMethod(), request.getMethod().name(), result);
+        result = beRestChainContext.handleResult(body, returnType.getMethod(), request.getMethod().name(), result, responseStatusCode);
 
-        Class<?> clazz = returnType.getMethod().getReturnType();
         if (CharSequence.class.isAssignableFrom(clazz) || clazz == char.class) {
             try {
                 return objectMapper.writeValueAsString(beRestChainContext.complete(result));

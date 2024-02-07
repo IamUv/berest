@@ -5,7 +5,7 @@
 
     <groupId>io.github.iamuv</groupId>
     <artifactId>berest</artifactId>
-    <version>0.5.0</version>
+    <version>0.5.1</version>
 
     <name>BeRest</name>
     <description>
@@ -106,7 +106,7 @@
             <plugin>
                 <groupId>org.sonatype.central</groupId>
                 <artifactId>central-publishing-maven-plugin</artifactId>
-                <version>0.1.6</version>
+                <version>0.3.0</version>
                 <extensions>true</extensions>
                 <configuration>
                     <publishingServerId>central</publishingServerId>
@@ -239,19 +239,6 @@
             </build>
         </profile>
     </profiles>
-
-<!--    <repositories>-->
-<!--        <repository>-->
-<!--            <id>oss-sonatype</id>-->
-<!--            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>-->
-<!--            <releases>-->
-<!--                <enabled>false</enabled>-->
-<!--            </releases>-->
-<!--            <snapshots>-->
-<!--                <enabled>true</enabled>-->
-<!--            </snapshots>-->
-<!--        </repository>-->
-<!--    </repositories>-->
 
 
 </project>

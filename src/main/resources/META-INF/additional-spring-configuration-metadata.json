@@ -1,0 +1,101 @@
+{
+  "groups": [
+    {
+      "name": "berest",
+      "type": "io.github.iamuv.berest.spring.SpringConfigurationProperties",
+      "sourceType": "io.github.iamuv.berest.spring.SpringConfigurationProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "berest.result.mode",
+      "type": "io.github.iamuv.berest.spring.SpringConfigurationProperties$ResultMode",
+      "sourceType": "io.github.iamuv.berest.spring.SpringConfigurationProperties"
+    },
+    {
+      "name": "berest.result.debug",
+      "type": "java.lang.Boolean",
+      "sourceType": "io.github.iamuv.berest.spring.SpringConfigurationProperties"
+    },
+    {
+      "name": "berest.result.visible.id",
+      "type": "java.lang.Boolean",
+      "sourceType": "io.github.iamuv.berest.spring.SpringConfigurationProperties"
+    },
+    {
+      "name": "berest.result.visible.http-status",
+      "type": "java.lang.Boolean",
+      "sourceType": "io.github.iamuv.berest.spring.SpringConfigurationProperties"
+    },
+    {
+      "name": "berest.result.http-status.default.get",
+      "type": "java.lang.Integer",
+      "sourceType": "io.github.iamuv.berest.spring.SpringConfigurationProperties",
+      "description": "The default http status of 'GET' request."
+    },
+    {
+      "name": "berest.result.http-status.default.post",
+      "type": "java.lang.Integer",
+      "sourceType": "io.github.iamuv.berest.spring.SpringConfigurationProperties",
+      "description": "The default http status of 'POST' request."
+    },
+    {
+      "name": "berest.result.http-status.default.put",
+      "type": "java.lang.Integer",
+      "sourceType": "io.github.iamuv.berest.spring.SpringConfigurationProperties",
+      "description": "The default http status of 'PUT' request."
+    },
+    {
+      "name": "berest.result.http-status.default.delete",
+      "type": "java.lang.Integer",
+      "sourceType": "io.github.iamuv.berest.spring.SpringConfigurationProperties",
+      "description": "The default http status of 'DELETE' request."
+    },
+    {
+      "name": "berest.result.http-status.return-void.post",
+      "type": "java.lang.Integer",
+      "sourceType": "io.github.iamuv.berest.spring.SpringConfigurationProperties",
+      "description": "When the 'POST' request method return type is void, the http status will be."
+    },
+    {
+      "name": "berest.result.http-status.return-void.put",
+      "type": "java.lang.Integer",
+      "sourceType": "io.github.iamuv.berest.spring.SpringConfigurationProperties",
+      "description": "When the 'PUT' request method return type is void, the http status will be."
+    },
+    {
+      "name": "berest.result.http-status.return-void.delete",
+      "type": "java.lang.Integer",
+      "sourceType": "io.github.iamuv.berest.spring.SpringConfigurationProperties",
+      "description": "When the 'DELETE' request method return type is void, the http status will be."
+    }
+  ],
+  "hints": [
+    {
+      "name": "berest.result.visible.id",
+      "values": [
+        {
+          "value": true,
+          "description": "The Result will show 'ID' field."
+        },
+        {
+          "value": false,
+          "description": "The Result will now show 'ID' field."
+        }
+      ]
+    },
+    {
+      "name": "berest.result.visible.http-status",
+      "values": [
+        {
+          "value": true,
+          "description": "The Result will show http 'status' field."
+        },
+        {
+          "value": false,
+          "description": "The Result will not show http 'status' field."
+        }
+      ]
+    }
+  ]
+}

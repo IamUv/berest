@@ -1,11 +1,12 @@
 package io.github.iamuv.berest.core;
 
-import io.github.iamuv.berest.core.handler.SimpleContextChainHandler;
+import io.github.iamuv.berest.annotation.HttpRedirect;
 import io.github.iamuv.berest.core.cache.ResultCache;
 import io.github.iamuv.berest.core.configuration.ExceptionHandlerConfigurer;
 import io.github.iamuv.berest.core.configuration.ResultConfigurer;
 import io.github.iamuv.berest.core.generator.DefaultResultIdGenerator;
 import io.github.iamuv.berest.core.generator.ResultIdGenerator;
+import io.github.iamuv.berest.core.handler.SimpleContextChainHandler;
 import io.github.iamuv.berest.core.result.RestfulResult;
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
@@ -75,25 +76,33 @@ public class BeRestChainContext {
         logger.info("Received a new request, id is " + r.getId());
     }
 
-    public RestfulResult handleResult(Object value, Method method, String httpMethod, RestfulResult result) {
+    public RestfulResult handleResult(Object value, Method method, String httpMethod, RestfulResult result, Integer responseCode) {
         Class<?> clazz = method.getReturnType();
         boolean isVoid = false;
         if (clazz == void.class) {
             isVoid = true;
             logger.debug("Request " + result.getId() + " return type is void");
         }
-        switch (httpMethod.toUpperCase()) {
-            case "POST":
-                result.setHttpStatus(isVoid ? resultConfigurer.getMethodPostReturnVoidHttpStatus() : resultConfigurer.getMethodPostDefaultHttpStatus());
-                break;
-            case "PUT":
-                result.setHttpStatus(isVoid ? resultConfigurer.getMethodPutReturnVoidHttpStatus() : resultConfigurer.getMethodPutDefaultHttpStatus());
-                break;
-            case "DELETE":
-                result.setHttpStatus(isVoid ? resultConfigurer.getMethodDeleteReturnVoidHttpStatus() : resultConfigurer.getMethodDeleteDefaultHttpStatus());
-                break;
-            default:
-                result.setHttpStatus(isVoid ? resultConfigurer.getMethodGetReturnVoidHttpStatus() : SC_OK);
+        HttpRedirect httpRedirect = method.getAnnotation(HttpRedirect.class);
+        if (httpRedirect != null) {
+            setRedirect(result.getId(), httpRedirect.url(), httpRedirect.clearBuffer(), httpRedirect.value());
+        }
+        if (responseCode == null) {
+            switch (httpMethod.toUpperCase()) {
+                case "POST":
+                    result.setHttpStatus(isVoid ? resultConfigurer.getMethodPostReturnVoidHttpStatus() : resultConfigurer.getMethodPostDefaultHttpStatus());
+                    break;
+                case "PUT":
+                    result.setHttpStatus(isVoid ? resultConfigurer.getMethodPutReturnVoidHttpStatus() : resultConfigurer.getMethodPutDefaultHttpStatus());
+                    break;
+                case "DELETE":
+                    result.setHttpStatus(isVoid ? resultConfigurer.getMethodDeleteReturnVoidHttpStatus() : resultConfigurer.getMethodDeleteDefaultHttpStatus());
+                    break;
+                default:
+                    result.setHttpStatus(isVoid ? resultConfigurer.getMethodGetReturnVoidHttpStatus() : SC_OK);
+            }
+        } else {
+            result.setHttpStatus(responseCode.intValue());
         }
         return chainHandler.handleResult(value, method, httpMethod, result, resultConfigurer);
     }

@@ -14,6 +14,10 @@ public abstract class DefaultBeRestHandler<T extends RestfulResult> implements B
     @Override
     public T handleResult(Object methodReturnValue, Method method, String httpMethod, T result, ResultConfigurer configuration) {
         Class<?> clazz = method.getReturnType();
+        if (clazz == void.class) {
+            return result;
+        }
+
         if (CharSequence.class.isAssignableFrom(clazz) || clazz == char.class) {
             handleReturnCharSequence(result, methodReturnValue.toString());
         } else {
@@ -23,10 +27,7 @@ public abstract class DefaultBeRestHandler<T extends RestfulResult> implements B
         if (resultField != null) {
             setField(result, resultField.value(), methodReturnValue);
         }
-        resultField = method.getReturnType().getAnnotation(ResultField.class);
-        if (resultField != null) {
-            setField(result, resultField.value(), methodReturnValue);
-        }
+
         Field[] fields = methodReturnValue.getClass().getFields();
         for (Field field : fields) {
             if (field.trySetAccessible()) {

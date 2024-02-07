@@ -1,6 +1,6 @@
 # BeRest
-\
-**基于spring和jakarta.servlet的快速实现restful化API扩展**
+![Maven Central](https://img.shields.io/maven-central/v/io.github.iamuv/berest?color=00DD00)
+> 基于spring和jakarta.servlet的快速实现restful化API扩展
 ***
 ### 实现效果
 \
@@ -71,9 +71,17 @@ public Map<Object, Object> map() {
 内置`Simple`和`Standard`两种模式\
 默认使用`Simple`模式
 
-`maven`
-```java
-//TODO 待发布
+![Maven Central](https://img.shields.io/maven-central/v/io.github.iamuv/berest?color=00DD00)
+```xml
+<dependency>
+    <groupId>io.github.iamuv</groupId>
+    <artifactId>berest</artifactId>
+    <version>0.5.0</version>
+</dependency>
+```
+`gradle`
+```xml
+implementation group: 'io.github.iamuv', name: 'berest', version: '0.5.0'
 ```
 ***
 
